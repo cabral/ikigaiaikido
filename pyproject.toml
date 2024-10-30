@@ -25,9 +25,9 @@ distribution = false
 name = "ikigaiaikido"
 version = "0.1.0"
 description = "Transaction Filtering App"
-authors = ["Your Name <your.email@example.com>"]
+authors = ["Felipe Cabral <felipe.benites@gmail.com>"]
 readme = "README.md"
-packages = [{ include = "your_package_name" }]
+packages = ["Ikigai Aikido finance dashboard"]
 
 [tool.poetry.dependencies]
     python = "3.12.7"
