@@ -30,11 +30,11 @@ readme = "README.md"
 packages = [{ include = "your_package_name" }]
 
 [tool.poetry.dependencies]
-    jupyter>="1.1.1",
-    pandas>="2.2.3",
-    streamlit>="1.39.0",
-    streamlit-authenticator>="0.4.1",
-    PyYAML>=6.0.2",
+    jupyter = "1.1.1"
+    pandas = "2.2.3"
+    streamlit = "1.39.0"
+    streamlit-authenticator = "0.4.1"
+    PyYAML = "6.0.2"
 
 [tool.poetry.dev-dependencies]
 # Add any development dependencies here
