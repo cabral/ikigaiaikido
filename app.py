@@ -4,23 +4,9 @@ import streamlit as st
 import pandas as pd
 import streamlit_authenticator as stauth
 from datetime import datetime
-import re
+import re  # Import the re module for regular expressions
 
-# Load configuration
-# with open('config.yaml') as file:
-#     config = yaml.load(file, Loader=SafeLoader)
-
-# # Initialize authenticator
-# authenticator = stauth.Authenticate(
-#     config['credentials'],
-#     config['cookie']['name'],
-#     config['cookie']['key'],
-#     config['cookie']['expiry_days']
-# )
-
-# # Login widget
-# name, authentication_status, username = authenticator.login()authentication_status = True
-
+# Authentication logic (omitted for brevity)
 authentication_status = True
 
 if authentication_status:
@@ -114,7 +100,18 @@ if authentication_status:
                 # No amounts selected, include all amounts
                 df_filtered = df_total.copy()
 
+            # **Add Checkbox for Unique Sendernames**
+            unique_names_only = st.checkbox("Show only one transaction per Sendername")
+
             df_result = df_filtered[['Sendername', 'Amount', 'Transday']]
+
+            # **Apply Unique Sendernames Filter if Checkbox is Selected**
+            if unique_names_only:
+                # Optionally sort by date to keep the latest transaction
+                df_result = df_result.sort_values(by='Transday', ascending=False)
+                df_result = df_result.drop_duplicates(subset='Sendername', keep='first').reset_index(drop=True)
+            else:
+                df_result.reset_index(drop=True, inplace=True)
 
             # Find Sendernames that appear again with different amounts
             sendernames = df_result['Sendername'].unique()
@@ -127,17 +124,40 @@ if authentication_status:
                 # Since all amounts are included, there are no other transactions
                 df_other_amounts = pd.DataFrame(columns=['Sendername', 'Amount', 'Transday'])
 
-            # Reset index
-            df_result.reset_index(drop=True, inplace=True)
+            # Reset index for other transactions
             df_other_amounts.reset_index(drop=True, inplace=True)
 
             # Display the filtered DataFrames
             st.subheader("Filtered Transactions")
             st.dataframe(df_result)
 
+            # **Add Descriptive Statistics for Filtered Transactions**
+            st.markdown("**Summary of Filtered Transactions:**")
+            st.write(f"- Total number of transactions: {len(df_result)}")
+            if not df_result['Amount'].empty:
+                total_amount = df_result['Amount'].sum()
+                avg_amount = df_result['Amount'].mean()
+                st.write(f"- Total payment amount: {total_amount:.2f}")
+                st.write(f"- Average payment amount: {avg_amount:.2f}")
+            else:
+                st.write("- Total payment amount: N/A")
+                st.write("- Average payment amount: N/A")
+
             st.subheader("Other Transactions by Same Sendernames")
             if not df_other_amounts.empty:
                 st.dataframe(df_other_amounts)
+
+                # **Add Descriptive Statistics for Other Transactions**
+                st.markdown("**Summary of Other Transactions:**")
+                st.write(f"- Total number of transactions: {len(df_other_amounts)}")
+                if not df_other_amounts['Amount'].empty:
+                    total_other_amount = df_other_amounts['Amount'].sum()
+                    avg_other_amount = df_other_amounts['Amount'].mean()
+                    st.write(f"- Total payment amount: {total_other_amount:.2f}")
+                    st.write(f"- Average payment amount: {avg_other_amount:.2f}")
+                else:
+                    st.write("- Total payment amount: N/A")
+                    st.write("- Average payment amount: N/A")
             else:
                 st.write("No other transactions found for the selected sender names.")
 
@@ -168,11 +188,8 @@ if authentication_status:
     else:
         st.info("Please upload at least one CSV file to proceed.")
 
-    # Logout button
-    # authenticator.logout('Logout', 'main')
-
+    # Logout button (omitted for brevity)
 elif authentication_status == False:
     st.error('Username or password is incorrect')
-
 elif authentication_status == None:
     st.warning('Please enter your username and password')
