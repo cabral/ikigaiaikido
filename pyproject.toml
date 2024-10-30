@@ -30,6 +30,7 @@ readme = "README.md"
 packages = [{ include = "your_package_name" }]
 
 [tool.poetry.dependencies]
+    python = "3.10"
     jupyter = "1.1.1"
     pandas = "2.2.3"
     streamlit = "1.39.0"
