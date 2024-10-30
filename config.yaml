@@ -1,0 +1,15 @@
+credentials:
+  usernames:
+    johndoe:
+      email: johndoe@example.com
+      name: John Doe
+      password: hashed_password_here
+    janesmith:
+      email: janesmith@example.com
+      name: Jane Smith
+      password: hashed_password_here
+
+cookie:
+  expiry_days: 30
+  name: some_cookie_name
+  key: some_signature_key
