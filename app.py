@@ -32,7 +32,7 @@ if authentication_status:
         # Read and concatenate each uploaded file
         for uploaded_file in uploaded_files:
             # Specify the date columns to parse
-            date_columns = ['Accday', 'Transday', 'Valueday']
+            date_columns = ['Accday', 'Transday', 'Message','Valueday']
             df = pd.read_csv(
                 uploaded_file,
                 skiprows=1,  # Skip the first line with the report header
@@ -103,7 +103,7 @@ if authentication_status:
             # **Add Checkbox for Unique Sendernames**
             unique_names_only = st.checkbox("Show only one transaction per Sendername")
 
-            df_result = df_filtered[['Sendername', 'Amount', 'Transday']]
+            df_result = df_filtered[['Sendername', 'Amount', 'Message', 'Transday']]
 
             # **Apply Unique Sendernames Filter if Checkbox is Selected**
             if unique_names_only:
@@ -119,10 +119,10 @@ if authentication_status:
                 df_other_amounts = df_total[
                     (df_total['Sendername'].isin(sendernames)) &
                     (~df_total['Amount'].isin(amounts_to_filter))
-                ][['Sendername', 'Amount', 'Transday']]
+                ][['Sendername', 'Amount', 'Message','Transday']]
             else:
                 # Since all amounts are included, there are no other transactions
-                df_other_amounts = pd.DataFrame(columns=['Sendername', 'Amount', 'Transday'])
+                df_other_amounts = pd.DataFrame(columns=['Sendername', 'Amount', 'Message','Transday'])
 
             # Reset index for other transactions
             df_other_amounts.reset_index(drop=True, inplace=True)
