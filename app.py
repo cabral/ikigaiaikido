@@ -38,7 +38,6 @@ if authentication_status:
                 skiprows=1,  # Skip the first line with the report header
                 encoding=selected_encoding,
                 parse_dates=date_columns,
-                infer_datetime_format=True
             )
             df_total = pd.concat([df_total, df], ignore_index=True)
 
